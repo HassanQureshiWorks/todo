@@ -24,6 +24,8 @@ class SignupdetailsState extends State<Signupdetails> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController professionController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
 
   @override
   void dispose() {
@@ -100,6 +102,7 @@ class SignupdetailsState extends State<Signupdetails> {
                   SizedBox(height: 10),
                   _buildTextField(Icons.person, "Enter profession",professionController,),
                   SizedBox(height: 10),
+                  _buildTextField(Icons.person, "Address",addressController,),
                   SizedBox(height: 20),
                   _buildButton("Sign up", Colors.green),
                   SizedBox(height: 10),
@@ -202,7 +205,9 @@ class SignupdetailsState extends State<Signupdetails> {
           firstnameController.text,
           lastnameController.text,
           emailController.text,
-          professionController.text);
+          professionController.text,
+          addressController.text
+      );
 
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => Home()), // ✅ Ensure correct navigation
@@ -230,11 +235,12 @@ class SignupdetailsState extends State<Signupdetails> {
     ).show();
   }
 }
-Future adduserdetails(String firstname,String lastname, String email, String profession) async{
+Future adduserdetails(String firstname,String lastname, String email, String profession, String address) async{
   await FirebaseFirestore.instance.collection('users').add({
     'firstname' : firstname,
-    'lastname' : firstname,
+    'lastname' : lastname,
     'email' : email,
     'profession': profession,
+    'address': address,
   });
 }
