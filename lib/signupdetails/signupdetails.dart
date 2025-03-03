@@ -183,7 +183,7 @@ class SignupdetailsState extends State<Signupdetails> {
 
     if (user != null) { // ✅ Correct variable name
       print("User is successfully created");
-      adduserdetails(professionController.text);
+      adduserdetails(professionController.text,email);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => Home()), // ✅ Ensure correct navigation
       );
@@ -210,7 +210,7 @@ class SignupdetailsState extends State<Signupdetails> {
     ).show();
   }
 }
-Future adduserdetails(String profession) async{
+Future adduserdetails(String profession,String email) async{
   await FirebaseFirestore.instance.collection('users').add({
     'profession': profession,
   });
