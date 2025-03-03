@@ -19,14 +19,16 @@ class SignupdetailsState extends State<Signupdetails> {
 
   final FirebaseAuthService _auth = FirebaseAuthService();
 
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController firstnameController = TextEditingController();
+  TextEditingController lastnameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController professionController = TextEditingController();
 
   @override
   void dispose() {
-    usernameController.dispose();
+    firstnameController.dispose();
+    lastnameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     professionController.dispose();
@@ -61,7 +63,20 @@ class SignupdetailsState extends State<Signupdetails> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
-                  _buildTextField(Icons.person, "Enter username",usernameController,),
+                  Row(
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: _buildTextField(Icons.person, "Firstname", firstnameController),
+                      ),
+                      SizedBox(width: 16), // Adjust the spacing here
+                      Flexible(
+                        flex: 2,
+                        child: _buildTextField(Icons.person, "Lastname", lastnameController),
+                      ),
+                    ],
+                  ),
+
                   SizedBox(height: 10),
                   _buildTextField(Icons.email, "Enter your email",emailController,
                       validator: (value) {
@@ -115,6 +130,7 @@ class SignupdetailsState extends State<Signupdetails> {
       {bool obscureText = false, String? Function(String?)? validator}) {
     return TextFormField(
       controller: controller,
+      textCapitalization: TextCapitalization.words,
       obscureText: obscureText,
       decoration: InputDecoration(
         prefixIcon: Icon(icon),
@@ -175,7 +191,6 @@ class SignupdetailsState extends State<Signupdetails> {
   }
 
   void _signup(BuildContext context) async {
-    String username = usernameController.text;
     String email = emailController.text;
     String password = passwordController.text;
 
@@ -183,7 +198,12 @@ class SignupdetailsState extends State<Signupdetails> {
 
     if (user != null) { // ✅ Correct variable name
       print("User is successfully created");
-      adduserdetails(professionController.text,email);
+      adduserdetails(
+          firstnameController.text,
+          lastnameController.text,
+          emailController.text,
+          professionController.text);
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => Home()), // ✅ Ensure correct navigation
       );
@@ -210,8 +230,11 @@ class SignupdetailsState extends State<Signupdetails> {
     ).show();
   }
 }
-Future adduserdetails(String profession,String email) async{
+Future adduserdetails(String firstname,String lastname, String email, String profession) async{
   await FirebaseFirestore.instance.collection('users').add({
+    'firstname' : firstname,
+    'lastname' : firstname,
+    'email' : email,
     'profession': profession,
   });
 }
