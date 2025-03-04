@@ -61,7 +61,7 @@ class _SigninState extends State<Signin> {
                     return null;
                   }),
               SizedBox(height: 50),
-              _buildButton("Sign in", Color(0xFF7FBFA6)),
+              _buildButton("Sign in"),
               SizedBox(height: 10),
               Center(child: Text("OR")),
               SizedBox(height: 20),
@@ -97,14 +97,14 @@ class _SigninState extends State<Signin> {
     );
   }
 
-  Widget _buildButton(String text, Color color) {
+  Widget _buildButton(String text,) {
     return Center(
       child: SizedBox(
         width: 260,
         height: 50,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            backgroundColor: color,
+            backgroundColor: Colors.green,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30),
             ),
