@@ -28,12 +28,13 @@ class SignupdetailsState extends State<Signupdetails> {
   bool isOtherSelected = false; // Track if "Other" is selected
 
   List<String> professions = [
-    "Doctor",
-    "Engineer",
-    "Teacher",
-    "Businessman",
-    "Student",
-    "Freelancer",
+    "Plumber",
+    "Carpenter",
+    "Barber",
+    "Electrician ",
+    "Painter ",
+    "Locksmith",
+    "Welder",
     "Other"
   ];
 
@@ -70,12 +71,12 @@ class SignupdetailsState extends State<Signupdetails> {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: _buildTextField(Icons.person, "Firstname", firstnameController),
+                      child: _buildTextField(Icons.person, "First Name", firstnameController),
                     ),
                     SizedBox(width: 16),
                     Flexible(
                       flex: 1,
-                      child: _buildTextField(Icons.person, "Lastname", lastnameController),
+                      child: _buildTextField(Icons.person, "Last name", lastnameController),
                     ),
                   ],
                 ),
@@ -233,46 +234,47 @@ class SignupdetailsState extends State<Signupdetails> {
     String email = emailController.text.trim();
     String password = passwordController.text.trim();
 
-    try {
-      User? user = await _auth.signUpWithEmailAndPassword(email, password);
+    User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
-      if (user != null) {
-        print("User successfully created");
+    if (user != null) { // ✅ User created successfully
+      print("User is successfully created");
 
-        String profession = isOtherSelected ? otherProfessionController.text : selectedProfession!;
+      String profession = isOtherSelected ? otherProfessionController.text : selectedProfession!;
 
-        adduserdetails(
-          firstnameController.text,
-          lastnameController.text,
-          emailController.text,
-          profession,
-          addressController.text,
-        );
+      adduserdetails(
+        firstnameController.text,
+        lastnameController.text,
+        emailController.text,
+        profession,
+        addressController.text,
+      );
 
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => Home()),
-        );
-      }
-    } catch (e) {
-      showError(context, e.toString());
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => Home()),
+      );
+
+    } else {
+      // ✅ Show error dialog if signup fails (e.g., email already in use)
+      showError(context);
+      print("Some error happened");
     }
   }
 
-  // Show Error Dialog
-  void showError(BuildContext context, String errorMessage) {
+  void showError(BuildContext context) {
     AwesomeDialog(
       context: context,
       dialogType: DialogType.error,
       headerAnimationLoop: false,
       animType: AnimType.bottomSlide,
       title: 'Error',
-      desc: errorMessage,
+      desc: FirebaseAuthService.error,  // ✅ This will show the correct Firebase error (e.g., email already in use)
       buttonsTextStyle: const TextStyle(color: Colors.black),
       showCloseIcon: true,
       btnCancelOnPress: () {},
       btnOkOnPress: () {},
     ).show();
   }
+
 }
 
 // Firestore: Store User Data
